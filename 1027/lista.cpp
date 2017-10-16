@@ -3,9 +3,9 @@
 
 //typedef Lista encadeada SIMPLES
 typedef struct Lista{
-	int valor;
-	Lista *prox;
-	
+	int 	valor;
+	Lista 	*prox;
+	Lista 	*ant;
 }Lista;
 
 //Funcao que mostra lista toda
@@ -16,27 +16,50 @@ void mostraLista(Lista **lista){
 	return;
 }
 
+
+//funcao que elimina da lista dupla encadeada
+// Primeiro andamos na lista
+// caso que seja cabeca da lista
+// caso que nao seja
+void eliminaDaLista(Lista **lista, int indice){
+	Lista *aux = *lista;
+	while( indice-- >0)
+		aux = aux->prox;
+	if(aux == *lista){
+		*lista = aux->prox;
+		free(aux);
+	}else{
+		aux->ant->prox = aux->prox;
+		aux->prox->ant = aux->ant;
+		free(aux);
+	}
+	return ;
+}
+
 int main(){
-	Lista *lista, *aux;
-	int entrada;
-	scanf("%d",&entrada);
+	Lista *lista = NULL, *aux = NULL;
+	int   entrada, pulos, i = 0;
+	scanf("%d %d",&entrada,&pulos);
 	//Loop de alimentacao da lista
-	while(entrada != -1){
+	while(entrada > i++){
 		if(lista == NULL){
 			lista = (Lista *)malloc(sizeof(Lista));
-			lista->valor = entrada; 
-			lista->prox = NULL;
+			lista->valor = i; 
+			lista->prox = NULL; 
+			lista->ant = NULL;
 		}else{
 			aux = lista;
 			while(aux->prox != NULL)
 				aux = aux->prox;
 			aux->prox = (Lista *)malloc(sizeof(Lista));
-			aux->prox->valor = entrada;
+			aux->prox->valor = i;
 			aux->prox->prox = NULL;	
+			aux->prox->ant = aux;
 		}	
-		scanf("%d",&entrada);
 	}
 	//Mostra a lista inteira
+	mostraLista(&lista);
+	eliminaDaLista(&lista,pulos);
 	mostraLista(&lista);
 	return 0 ;
 }
