@@ -1,9 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define TRUE 1
+#define FALSE 0
+
 //typedef Lista encadeada SIMPLES
 typedef struct Lista{
 	int 	valor;
+	int 	ehPrimeiro;
 	Lista 	*prox;
 	Lista 	*ant;
 }Lista;
@@ -11,9 +15,17 @@ typedef struct Lista{
 //Funcao que mostra lista toda
 void mostraLista(Lista **lista){
 	Lista *aux = *lista;
-	while(aux != NULL)
-			printf("\t%d\n",aux->valor)? aux = aux->prox: aux = aux->prox;
+	do{
+		printf("\t%d\n",aux->valor)? aux = aux->prox: aux = aux->prox;
+	}while(aux != *lista);
 	return;
+}
+
+void algoritmoFlaviousJosephus(Lista **lista){
+	Lista *aux = *lista;
+	while((*lista)->prox == NULL){
+		
+	}
 }
 
 
@@ -27,6 +39,7 @@ void eliminaDaLista(Lista **lista, int indice){
 		aux = aux->prox;
 	if(aux == *lista){
 		*lista = aux->prox;
+		(*lista)->ehPrimeiro = TRUE;
 		free(aux);
 	}else{
 		aux->ant->prox = aux->prox;
@@ -45,19 +58,21 @@ int main(){
 		if(lista == NULL){
 			lista = (Lista *)malloc(sizeof(Lista));
 			lista->valor = i; 
-			lista->prox = NULL; 
+			lista->ehPrimeiro = TRUE;
+			lista->prox = lista; 
 			lista->ant = NULL;
 		}else{
 			aux = lista;
-			while(aux->prox != NULL)
+			while(aux->prox != lista)
 				aux = aux->prox;
 			aux->prox = (Lista *)malloc(sizeof(Lista));
 			aux->prox->valor = i;
-			aux->prox->prox = NULL;	
+			aux->prox->ehPrimeiro = FALSE;
+			aux->prox->prox = lista;	
 			aux->prox->ant = aux;
+			lista->ant = aux->prox;
 		}	
 	}
-	//Mostra a lista inteira
 	mostraLista(&lista);
 	eliminaDaLista(&lista,pulos);
 	mostraLista(&lista);
