@@ -35,17 +35,19 @@ class ListaDuplaEncadeada{
 			Lista *aux = this->cabeca;
 			do{
 				printf("\t%d\n",aux->valor)? aux = aux->prox: aux = aux->prox;
-			}while(aux != this->cabeca);
+			}while(!aux->ehPrimeiro);
 			return;
 		}
 
-		void algoritmoFlaviousJosephus(){
+		void algoritmoFlaviousJosephus(int pulos){
 			Lista *aux = this->cabeca;
-			while(this->cabeca->prox == NULL){
-				
+			int  i = 0 ;
+			while(this->tamanho > 1){
+				i += pulos-1;
+				i = i%(this->tamanho+1);
+				this->eliminaDaLista(i);
 			}
 		}
-
 
 		//funcao que elimina da lista dupla encadeada
 		// Primeiro andamos na lista
@@ -56,7 +58,7 @@ class ListaDuplaEncadeada{
 			while( indice-- >0)
 				aux = aux->prox;
 			if(aux == this->cabeca){
-				 this->cabeca= aux->prox;
+				this->cabeca= aux->prox;
 				this->cabeca->ehPrimeiro = TRUE;
 				free(aux);
 			}else{
@@ -76,7 +78,7 @@ class ListaDuplaEncadeada{
 				this->cabeca->valor = i; 
 				this->cabeca->ehPrimeiro = TRUE;
 				this->cabeca->prox = this->cabeca; 
-				this->cabeca->ant = NULL;
+				this->cabeca->ant = this->cabeca;
 			}else{
 				aux = this->cabeca;
 				while(aux->prox != this->cabeca)
@@ -91,19 +93,28 @@ class ListaDuplaEncadeada{
 			this->tamanho++;
 			return;
 		}
+
+		// GETS e SETS
+		Lista* getCabeca(){
+			return this->cabeca;
+		}
+
+
 };
 
 int main(){
-	int   entrada, pulos, i = 0;
-	ListaDuplaEncadeada lista;
-	//Leitura argumentos 
-	scanf("%d %d",&entrada,&pulos);
-	//Loop de alimentacao da lista
-	while(entrada > i++){
-		lista.insereLista(i);
+	int   entrada, pulos, i = 0,numTestes,j = 0;
+	scanf("%d",&numTestes);
+	for (j = 0; j < numTestes; ++j){
+		ListaDuplaEncadeada lista;
+		//Leitura argumentos 
+		scanf("%d %d",&entrada,&pulos);
+		//Loop de alimentacao da lista
+		while(entrada > i++){
+			lista.insereLista(i);
+		}
+		lista.algoritmoFlaviousJosephus(pulos);
+		printf("Case %d: %d\n",j+1, lista.getCabeca()->valor);
 	}
-	lista.mostraLista();
-	lista.eliminaDaLista(pulos);
-	lista.mostraLista();
 	return 0 ;
 }
